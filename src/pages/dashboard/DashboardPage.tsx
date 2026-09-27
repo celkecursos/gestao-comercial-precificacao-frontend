@@ -48,7 +48,7 @@ export function DashboardPage() {
     <>
       <PageHeader
         title="Dashboard"
-        description={`Olá${firstName ? `, ${firstName}` : ''}! Acompanhe os principais indicadores.`}
+        description={`Olá${firstName ? `, ${firstName}` : ''}! Acompanhe os principais indicadores...`}
       />
 
       <section aria-label="Indicadores" className="mb-6">
