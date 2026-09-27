@@ -1,0 +1,11 @@
+# Fallback de SPA para servidores Apache/LiteSpeed (ex.: Hostinger).
+# Qualquer rota que não seja um arquivo existente é atendida pelo index.html,
+# permitindo acessar diretamente URLs como /dashboard ou /produtos.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>
