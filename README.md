@@ -249,3 +249,12 @@ O build gera arquivos estáticos em `dist/`, que podem ser publicados em qualque
 | `npm run typecheck`    | Verificação de tipos do TypeScript       |
 | `npm run format`       | Prettier (formata o projeto)             |
 | `npm run format:check` | Prettier (somente verificação)           |
+
+## Autor
+
+Desenvolvido por [Cesar Szpak](https://celke.com.br) — [Celke
+Cursos](https://github.com/celkecursos).
+
+## Licença
+
+MIT — veja o arquivo [LICENSE](LICENSE.txt) para detalhes.
