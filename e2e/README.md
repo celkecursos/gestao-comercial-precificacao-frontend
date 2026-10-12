@@ -86,15 +86,21 @@ e2e/
   users/               uma pasta por módulo de src/pages/
     crud.spec.ts
     access.spec.ts
+  products/
+    crud.spec.ts
+    access.spec.ts
+    products.helpers.ts  busca e limpeza usadas pelos dois specs
 ```
 
 ## Os specs
 
-| Spec                   | Cobre                                                                                                                                      | Dado criado                                                                                                                                         |
-| :--------------------- | :----------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `session.spec.ts`      | sessão gravada entra no painel; rota privada sem sessão vai para o login                                                                   | nenhum                                                                                                                                              |
-| `users/crud.spec.ts`   | validação do formulário vazio (sem POST), cadastro (201), busca, e-mail duplicado (409 + mensagem no modal), edição, desativação, exclusão | `E2E Usuário <carimbo>` / `e2e-<carimbo>@e2e.test` — excluído pelo próprio teste (exclusão física); o `afterAll` remove pela API se um passo falhar |
-| `users/access.spec.ts` | perfil Usuário não vê o menu nem acessa `/usuarios`; admin não pode desativar/excluir a si mesmo                                           | nenhum                                                                                                                                              |
+| Spec                      | Cobre                                                                                                                                                                                                               | Dado criado                                                                                                                                         |
+| :------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `session.spec.ts`         | sessão gravada entra no painel; rota privada sem sessão vai para o login                                                                                                                                            | nenhum                                                                                                                                              |
+| `users/crud.spec.ts`      | validação do formulário vazio (sem POST), cadastro (201), busca, e-mail duplicado (409 + mensagem no modal), edição, desativação, exclusão                                                                          | `E2E Usuário <carimbo>` / `e2e-<carimbo>@e2e.test` — excluído pelo próprio teste (exclusão física); o `afterAll` remove pela API se um passo falhar |
+| `users/access.spec.ts`    | perfil Usuário não vê o menu nem acessa `/usuarios`; admin não pode desativar/excluir a si mesmo                                                                                                                    | nenhum                                                                                                                                              |
+| `products/crud.spec.ts`   | validação do formulário vazio (sem POST), cadastro (201) com código em maiúsculas, busca pelo código, código duplicado (409 + mensagem no modal), edição, desativação, filtro de status (Ativos/Inativos), exclusão | `E2E Produto <carimbo>` / código `E2E-<carimbo>` — excluído pelo próprio teste (exclusão física); o `afterAll` remove pela API se um passo falhar   |
+| `products/access.spec.ts` | perfil Usuário vê o menu e a tela, pode editar e desativar, mas não tem a ação de excluir                                                                                                                           | `E2E Acesso <carimbo>` / código `E2E-AC-<carimbo>` — criado pela API no `beforeAll` e excluído no `afterAll`                                        |
 
 ## Achados
 
