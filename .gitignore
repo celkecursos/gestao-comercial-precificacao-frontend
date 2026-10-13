@@ -50,3 +50,7 @@ desktop.ini
 playwright-report/
 test-results/
 blob-report/
+
+# Links/cópias gerados por scripts/setup-ai.mjs (a fonte versionada é .agents/)
+.claude/skills
+.claude/rules

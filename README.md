@@ -172,7 +172,14 @@ src/
 └── main.tsx
 ```
 
-Convenções para quem for evoluir o projeto (pessoas ou agentes de IA) estão em [AGENTS.md](AGENTS.md).
+Convenções para quem for evoluir o projeto (pessoas ou agentes de IA) estão em [AGENTS.md](AGENTS.md), com o detalhe em [`.agents/`](.agents/README.md): rules (o padrão) e skills (o passo a passo), usáveis por qualquer ferramenta de IA (Claude Code, Codex, Copilot, Cursor, Paperclip...).
+
+```text
+AGENTS.md            # entrada para pessoas e qualquer IA (CLAUDE.md só importa este arquivo)
+.agents/rules/       # arquitetura, formulários, telas públicas/auth, UI/tema, e2e
+.agents/skills/      # implementar-tela, criar-teste-e2e, revisar-padroes
+scripts/             # check-padroes.mjs (fiscaliza as rules) e setup-ai.mjs (links para .claude/)
+```
 
 ## Integração com o backend
 
@@ -248,23 +255,26 @@ npm run e2e                       # a suíte inteira (sobe o npm run dev sozinho
 npm run e2e -- e2e/users/         # só um módulo
 ```
 
-Setup, variáveis `E2E_*` e o que cada spec cobre: [`e2e/README.md`](e2e/README.md). Padrão para escrever testes: [`.claude/rules/e2e.md`](.claude/rules/e2e.md).
+Setup, variáveis `E2E_*` e o que cada spec cobre: [`e2e/README.md`](e2e/README.md). Padrão para escrever testes: [`.agents/rules/e2e.md`](.agents/rules/e2e.md); processo: [`.agents/skills/criar-teste-e2e`](.agents/skills/criar-teste-e2e/SKILL.md).
 
 ## Scripts disponíveis
 
-| Script                 | Descrição                                |
-| ---------------------- | ---------------------------------------- |
-| `npm run dev`          | Servidor de desenvolvimento (porta 5173) |
-| `npm run build`        | Verificação de tipos + build de produção |
-| `npm run preview`      | Serve o build localmente (porta 4173)    |
-| `npm run lint`         | ESLint                                   |
-| `npm run lint:fix`     | ESLint com correções automáticas         |
-| `npm run typecheck`    | Verificação de tipos do TypeScript       |
-| `npm run format`       | Prettier (formata o projeto)             |
-| `npm run format:check` | Prettier (somente verificação)           |
-| `npm run e2e`          | Testes e2e (Playwright)                  |
-| `npm run e2e:ui`       | Testes e2e no modo interativo            |
-| `npm run e2e:headed`   | Testes e2e com o navegador visível       |
-| `npm run e2e:debug`    | Testes e2e passo a passo (Inspector)     |
-| `npm run e2e:report`   | Relatório HTML da última execução        |
-| `npm run e2e:codegen`  | Grava cliques e sugere seletores         |
+| Script                  | Descrição                                                                    |
+| ----------------------- | ---------------------------------------------------------------------------- |
+| `npm run dev`           | Servidor de desenvolvimento (porta 5173)                                     |
+| `npm run build`         | Verificação de tipos + build de produção                                     |
+| `npm run preview`       | Serve o build localmente (porta 4173)                                        |
+| `npm run lint`          | ESLint                                                                       |
+| `npm run lint:fix`      | ESLint com correções automáticas                                             |
+| `npm run typecheck`     | Verificação de tipos do TypeScript                                           |
+| `npm run format`        | Prettier (formata o projeto)                                                 |
+| `npm run format:check`  | Prettier (somente verificação)                                               |
+| `npm run check`         | lint + typecheck + format:check + check:padroes (definição de pronto)        |
+| `npm run check:padroes` | Varredura dos padrões de `.agents/rules/` (`scripts/check-padroes.mjs`)      |
+| `npm run setup:ai`      | Liga `.claude/skills` e `.claude/rules` a `.agents/` (roda no `npm install`) |
+| `npm run e2e`           | Testes e2e (Playwright)                                                      |
+| `npm run e2e:ui`        | Testes e2e no modo interativo                                                |
+| `npm run e2e:headed`    | Testes e2e com o navegador visível                                           |
+| `npm run e2e:debug`     | Testes e2e passo a passo (Inspector)                                         |
+| `npm run e2e:report`    | Relatório HTML da última execução                                            |
+| `npm run e2e:codegen`   | Grava cliques e sugere seletores                                             |

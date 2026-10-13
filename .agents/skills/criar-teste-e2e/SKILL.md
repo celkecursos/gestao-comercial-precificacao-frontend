@@ -1,15 +1,16 @@
 ---
 name: criar-teste-e2e
-description: Cria ou amplia os testes e2e (Playwright) de um módulo do frontend seguindo o padrão do projeto — e2e/<modulo>/<fluxo>.spec.ts. Use quando pedirem "teste e2e", "teste ponta a ponta" ou "/criar-teste-e2e <modulo>".
-argument-hint: <modulo> [fluxo]
+description: Cria ou amplia os testes e2e (Playwright) de um módulo do frontend seguindo o padrão do projeto — e2e/<modulo>/<fluxo>.spec.ts. Use quando pedirem "teste e2e", "teste ponta a ponta", ao terminar uma tela nova ou ao mudar uma tela que já tem teste.
 ---
 
 # Criar teste e2e de um módulo
 
-Argumento: `$ARGUMENTS` — o módulo (nome da pasta em `src/pages/`) e, opcionalmente, o fluxo.
+Entrada: o **módulo** (nome da pasta em `src/pages/`) e, opcionalmente, o **fluxo** —
+vindos da tarefa ou do pedido. Se não estiverem claros, deduza pela tela alterada.
 
-O **padrão** (organização, seletores, dado de teste) está em `.claude/rules/e2e.md` — leia
-antes de escrever. Esta skill é o **processo**. O modelo de referência é `e2e/users/`.
+O **padrão** (organização, seletores, dado de teste) está em `.agents/rules/e2e.md` — leia
+antes de escrever. Esta skill é o **processo**. Modelos: `e2e/users/` (CRUD com perfil),
+`e2e/products/` (com helper do módulo) e `e2e/session.spec.ts` (sem sessão).
 
 ## 1. Entender a tela antes de escrever
 
@@ -29,12 +30,15 @@ no componente (acessibilidade), não um seletor frágil.
 
 ## 2. Planejar os specs
 
-Proponha ao usuário a lista antes de escrever, por exemplo:
+Liste os specs antes de escrever. Numa conversa, proponha a lista ao usuário e espere o
+ok; numa tarefa autônoma (ex.: Paperclip), registre a lista na descrição do PR. Exemplo:
 
 - `crud.spec.ts` — ciclo completo num único `test` com `test.step`s: abre, valida vazio,
   cadastra, busca, erro de negócio da API, edita, ativa/desativa, exclui.
 - `access.spec.ts` — o que cada perfil vê e não vê (só se a tela tiver regra de perfil).
 - outros fluxos específicos do módulo (ex.: cálculo exibido, filtros).
+- fluxo público ou com e-mail (ex.: recuperação de senha) — siga "Fluxos sem sessão" e
+  "Fluxos com e-mail" da rule.
 
 Um arquivo por fluxo, não um arquivo gigante por módulo.
 
@@ -52,12 +56,16 @@ Um arquivo por fluxo, não um arquivo gigante por módulo.
 ```bash
 npm run e2e -- e2e/<modulo>/      # passar
 npm run e2e -- e2e/<modulo>/      # passar DE NOVO (dado único + limpeza)
-npm run lint && npm run typecheck && npm run format:check
+npm run check
 ```
 
-A API precisa estar rodando. Se um teste falhar, abra `npm run e2e:report` e leia o
+A API precisa estar rodando. Se o seu ambiente não tiver a API (ex.: agente em VPS),
+escreva o teste, rode `npm run check`, diga no PR que o e2e não rodou localmente e
+acompanhe a CI (`gh pr checks <número> --watch`). Falhou na CI: baixe o artefato
+`playwright-report` do job e leia o trace. Se um teste falhar, abra `npm run e2e:report` e leia o
 trace antes de mexer: a falha pode ser um **bug real** da tela ou da API. Bug real não se
-contorna no teste — registre no `e2e/README.md` (seção "Achados") e avise o usuário.
+contorna no teste — registre no `e2e/README.md` (seção "Achados") e avise o usuário
+(ou descreva no PR).
 
 ## 5. Documentar
 

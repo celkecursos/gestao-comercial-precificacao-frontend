@@ -4,11 +4,12 @@ Testes ponta a ponta: um navegador real contra o frontend rodando (`npm run dev`
 **API de verdade** (local ou develop). Não há mock — os testes criam, editam e excluem
 registros no banco.
 
-**Não entram na definição de pronto** (`lint` + `build` + `format:check`). São executados
-à mão, com a API no ar.
+Rodam à mão, com a API no ar, e na CI (`.github/workflows/e2e.yml`) em todo Pull Request.
+Tela nova ou alterada precisa de teste criado ou ajustado (ver "Definição de pronto" no
+`AGENTS.md`).
 
-Como **escrever** um teste: `.claude/rules/e2e.md` (padrão) e a skill
-`/criar-teste-e2e <modulo>` (processo).
+Como **escrever** um teste: `.agents/rules/e2e.md` (padrão) e a skill
+`.agents/skills/criar-teste-e2e/SKILL.md` (processo) — valem para qualquer ferramenta de IA.
 
 ## Começo rápido
 
