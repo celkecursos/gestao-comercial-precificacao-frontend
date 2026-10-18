@@ -61,7 +61,7 @@ jobs:
       - name: Checkout do backend
         uses: actions/checkout@v4
         with:
-          repository: cesarszpak/gestao-comercial-precificacao-backend
+          repository: ${{ github.repository_owner }}/gestao-comercial-precificacao-backend
           ref: ${{ inputs.backend_ref || 'develop' }}
           path: backend
 
