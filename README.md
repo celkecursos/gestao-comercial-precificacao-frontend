@@ -101,15 +101,17 @@ As páginas do painel são carregadas sob demanda (code splitting por rota), ent
 
 ## Funcionalidades
 
-| Rota         | Tela             | Recursos                                                                                |
-| ------------ | ---------------- | --------------------------------------------------------------------------------------- |
-| `/login`     | Login            | Validação, loading, mensagens de erro, aviso de sessão expirada, tema                   |
-| `/dashboard` | Dashboard        | 4 cards (usuários, produtos, cotações, fórmulas), gráfico e últimas cotações            |
-| `/usuarios`  | Usuários (ADMIN) | Busca, filtros por perfil e status, paginação, criar, editar, ativar/desativar, excluir |
-| `/produtos`  | Produtos         | Busca, filtro de status, criar, editar, ativar/desativar, excluir (ADMIN)               |
-| `/cotacoes`  | Cotações         | Filtros por commodity, período e fonte; cadastrar, editar, excluir (ADMIN)              |
-| `/formulas`  | Fórmulas         | Busca, filtro de status, criar, editar, ativar/desativar, excluir (ADMIN)               |
-| `/perfil`    | Meu Perfil       | Visualizar dados, editar nome e e-mail, alterar senha                                   |
+| Rota               | Tela                | Recursos                                                                                     |
+| ------------------ | ------------------- | -------------------------------------------------------------------------------------------- |
+| `/login`           | Login               | Validação, loading, mensagens de erro, aviso de sessão expirada, tema, "Esqueci minha senha" |
+| `/esqueci-senha`   | Esqueci minha senha | Pede o link de redefinição por e-mail; mensagem de sucesso sempre igual                      |
+| `/redefinir-senha` | Redefinir senha     | Nova senha + confirmação a partir do link do e-mail (`?token=`); link inválido ou expirado   |
+| `/dashboard`       | Dashboard           | 4 cards (usuários, produtos, cotações, fórmulas), gráfico e últimas cotações                 |
+| `/usuarios`        | Usuários (ADMIN)    | Busca, filtros por perfil e status, paginação, criar, editar, ativar/desativar, excluir      |
+| `/produtos`        | Produtos            | Busca, filtro de status, criar, editar, ativar/desativar, excluir (ADMIN)                    |
+| `/cotacoes`        | Cotações            | Filtros por commodity, período e fonte; cadastrar, editar, excluir (ADMIN)                   |
+| `/formulas`        | Fórmulas            | Busca, filtro de status, criar, editar, ativar/desativar, excluir (ADMIN)                    |
+| `/perfil`          | Meu Perfil          | Visualizar dados, editar nome e e-mail, alterar senha                                        |
 
 Todas as telas têm estados de **carregando**, **erro** (com "tentar novamente"), **vazio** e **sucesso** (notificações), e funcionam em desktop, tablet e celular (menu em gaveta, tabelas com rolagem horizontal e colunas secundárias ocultas).
 
@@ -152,7 +154,7 @@ src/
 │   └── layout/        # Logo, cabeçalho de página, seletor de tema
 ├── layouts/           # AdminLayout (sidebar + header + conteúdo)
 ├── pages/
-│   ├── auth/          # Login
+│   ├── auth/          # Login, esqueci a senha e redefinição (AuthLayout compartilhado)
 │   ├── dashboard/     # Dashboard e seus componentes (cards, gráfico)
 │   ├── users/         # Listagem + formulário de usuários
 │   ├── products/      # Listagem + formulário de produtos
@@ -198,11 +200,15 @@ Criadas pelo seed do backend. **Dados fictícios, apenas para demonstração.**
 
 ## Recuperação de senha
 
-> **Esta funcionalidade ainda não existe.**
+O link **"Esqueci minha senha"** da tela de login leva a `/esqueci-senha` (com o e-mail já digitado):
 
-A tela de login oferece apenas a autenticação com e-mail e senha: não há link "Esqueci minha senha", tela de recuperação nem redefinição de senha por e-mail.
+1. **`/esqueci-senha`** — o usuário informa o e-mail e a tela chama `POST /auth/forgot-password`. A mensagem de sucesso é **sempre a mesma**, exista ou não a conta: nem a API nem a tela revelam quais e-mails estão cadastrados. Pedidos demais (limite da API) mostram a mensagem de erro que a API devolve.
+2. O backend envia um e-mail com o link `PASSWORD_RESET_URL?token=...`. **`PASSWORD_RESET_URL` precisa apontar para `/redefinir-senha` deste frontend em cada ambiente** (ex.: `https://front.uno.com/redefinir-senha`).
+3. **`/redefinir-senha?token=...`** — nova senha e confirmação, com a mesma regra de senha forte do cadastro, e a tela chama `POST /auth/reset-password`. Se o token for inválido, expirado ou já usado (ou se o link vier sem token), a tela mostra o erro e o botão **"Solicitar um novo link"**.
 
-A recuperação de senha será implementada posteriormente por um **agente de IA através do Paperclip**, como uma das tarefas de demonstração do fluxo: projeto local → GitHub → Hostinger → Paperclip → branch da tarefa → pull request para `develop` → `homolog` → `main` (produção).
+Depois da redefinição, a API encerra todas as sessões do usuário. `/redefinir-senha` abre mesmo com uma sessão aberta no navegador (o link do e-mail precisa funcionar sempre); nesse caso, a sessão local também é encerrada ao concluir. `/esqueci-senha`, como o login, leva ao painel quem já está logado.
+
+Em desenvolvimento, com o backend em `MAIL_DRIVER=log`, o e-mail não é enviado: o link aparece no log da API.
 
 ## Ambientes e branches
 
