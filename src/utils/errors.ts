@@ -20,6 +20,18 @@ export function getErrorMessage(
   return fallback;
 }
 
+/**
+ * 400 de **regra de negócio** (a API devolve `message` como texto), e não de validação
+ * de campos (em que `message` é uma lista). Ex.: link de redefinição inválido ou expirado.
+ */
+export function isBusinessRuleError(error: unknown): boolean {
+  return (
+    axios.isAxiosError<ApiErrorResponse>(error) &&
+    error.response?.status === 400 &&
+    typeof error.response.data?.message === 'string'
+  );
+}
+
 /** Status HTTP de um erro da API, se houver. */
 export function getErrorStatus(error: unknown): number | undefined {
   return axios.isAxiosError(error) ? error.response?.status : undefined;

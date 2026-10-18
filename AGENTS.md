@@ -51,4 +51,4 @@ Verifique também a tela nos **dois temas** (claro e escuro) e em largura de cel
 
 ## Funcionalidades pendentes
 
-A **recuperação de senha** ainda não existe e é uma tarefa planejada, a ser feita por um agente via Paperclip. A API também ainda não possui os endpoints correspondentes.
+Nenhuma no momento. A **recuperação de senha** já existe (`pages/auth/ForgotPasswordPage.tsx` e `ResetPasswordPage.tsx`, sobre o `AuthLayout` compartilhado com o login).
